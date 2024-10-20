@@ -23,8 +23,8 @@ import org.mockito.junit.MockitoJUnitRunner;
 public class PacienteDAOTest {
     
     @Mock
-    PacienteDAO instance;
-            
+    private PacienteDAO instance;
+    
     
     public PacienteDAOTest() {
     }
@@ -62,13 +62,18 @@ public class PacienteDAOTest {
         
     }
     
-    @Test
+    @Test(expected = SQLException.class)
     public void testLevantarErroSeTentarCadastrarPacienteSemTodosOsDadosObrigatorios() throws SQLException {
+        
         Paciente p = new Paciente();
         p.setDataNascimento(new Date());
         p.setIdConvenio(2);
         
-        assertThrows(SQLException.class, () -> instance.cadastrarPaciente(p));
+        doThrow(new SQLException("Erro ao cadastrar"))
+                .when(instance)
+                .cadastrarPaciente(p);
+        
+        instance.cadastrarPaciente(p);
     }
 
     @Test

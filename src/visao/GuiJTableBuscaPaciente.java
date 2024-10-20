@@ -263,6 +263,10 @@ public class GuiJTableBuscaPaciente extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jcomboFiltroActionPerformed
 
+    public javax.swing.JTable getJtablePaciente() {
+    return jtablePaciente;
+}
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JLayeredPane jLayeredPane2;
@@ -277,3 +281,5 @@ public class GuiJTableBuscaPaciente extends javax.swing.JInternalFrame {
     private javax.swing.JTable jtablePaciente;
     // End of variables declaration//GEN-END:variables
 }
+
+

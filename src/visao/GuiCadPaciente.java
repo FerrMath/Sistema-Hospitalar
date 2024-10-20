@@ -3,8 +3,11 @@ package visao;
 
 import dao.ConvenioDAO;
 import dao.PacienteDAO;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 import modelo.Convenio;
@@ -194,6 +197,7 @@ public class GuiCadPaciente extends javax.swing.JInternalFrame {
             } else {
                 JOptionPane.showMessageDialog(this,
                         "Selecione um produto");
+                return;
             } // fecha else
 
            // Criando objeto PacienteDAO para cadastrar o paciente no banco de dados
@@ -203,7 +207,10 @@ public class GuiCadPaciente extends javax.swing.JInternalFrame {
             // Mensagem de sucesso
             JOptionPane.showMessageDialog(this, "Paciente cadastrado com sucesso!");
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "ERRO: " + e.getMessage());
+        }
+        catch (Exception e) {
             JOptionPane.showMessageDialog(this,
                     "ERRO! " + e.getMessage());
         } // fecha catch
@@ -253,7 +260,7 @@ public class GuiCadPaciente extends javax.swing.JInternalFrame {
         limpar();
     }
 
-    private void jbCadastrar1ActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jbCadastrar1ActionPerformed(java.awt.event.ActionEvent evt){
         cadastrar();
         limpar();
     }

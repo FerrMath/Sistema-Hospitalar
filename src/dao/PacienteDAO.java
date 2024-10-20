@@ -19,8 +19,8 @@ ela é responsável por realizar as operações de cadastro e busca de pacientes
  */
 public class PacienteDAO {
 
-    private ConexaoBanco conexao;
-    private Connection con;
+    public ConexaoBanco conexao;
+     public Connection con;
 
     /*No construtor da classe, a instância de ConexaoBanco é criada e 
     armazenada no atributo conexao. 
@@ -32,9 +32,12 @@ public class PacienteDAO {
 
     // método cadastrarPaciente
     public void cadastrarPaciente(Paciente pac) throws SQLException {
+        System.out.println(isTodosOsCamposPreenchidos(pac));
+         if (!isTodosOsCamposPreenchidos(pac)) {
+             throw new SQLException("Campos obrigatórios não preenchidos. Preencha todos os campos!");
+            }
 
         try {
-
             con = conexao.getConexao();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 
@@ -42,18 +45,22 @@ public class PacienteDAO {
             String sql = "insert into PACIENTE(NOME, ENDERECO, DATA_NASC, TELEFONE, CPF, RG, ID_CONVENIO_FK) values(?,?,?,?,?,?,?)";
 
             PreparedStatement pst = this.con.prepareStatement(sql);
+            
+           
+                // Atribuindo valores aos parâmetros
+                pst.setString(1, pac.getNome());
+                pst.setString(2, pac.getEndereco());
+                pst.setString(3, sdf.format(pac.getDataNascimento()));
+                pst.setString(4, pac.getTelefone());
+                pst.setString(5, pac.getCpf());
+                pst.setString(6, pac.getRg());
+                pst.setInt(7, pac.getIdConvenio());
 
-            // Atribuindo valores aos parâmetros
-            pst.setString(1, pac.getNome());
-            pst.setString(2, pac.getEndereco());
-            pst.setString(3, sdf.format(pac.getDataNascimento()));
-            pst.setString(4, pac.getTelefone());
-            pst.setString(5, pac.getCpf());
-            pst.setString(6, pac.getRg());
-            pst.setInt(7, pac.getIdConvenio());
+                // Executando o PreparedStatement
+                pst.execute();
+            
 
-            // Executando o PreparedStatement
-            pst.execute();
+
 
         } catch (SQLException se) {
             throw new SQLException("Erro ao inserir dados no Banco de Dados! " + se.getMessage());
@@ -174,6 +181,17 @@ public class PacienteDAO {
         } finally {
             con.close();
         }
+    }
+    
+    public boolean isTodosOsCamposPreenchidos(Paciente p) {
+        return (
+                p != null &&
+                p.getDataNascimento() != null &&
+                !p.getCpf().isBlank() &&
+                !p.getTelefone().isBlank() &&
+                !p.getEndereco().isBlank() &&
+                !p.getNome().isBlank()
+        );
     }
 
 }
